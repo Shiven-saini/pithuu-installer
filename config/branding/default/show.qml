@@ -1,77 +1,40 @@
-/* === This file is part of Calamares - <https://calamares.io> ===
- *
- *   SPDX-FileCopyrightText: 2015 Teo Mrnjavac <teo@kde.org>
- *   SPDX-FileCopyrightText: 2018 Adriaan de Groot <groot@kde.org>
- *   SPDX-License-Identifier: GPL-3.0-or-later
- *
- *   Calamares is Free Software: see the License-Identifier above.
- *
- */
+
 
 import QtQuick 2.0;
 import calamares.slideshow 1.0;
+import io.calamares.ui 1.0  // Calamares internals: Branding
 
 Presentation
 {
     id: presentation
 
-    function nextSlide() {
-        console.log("QML Component (default slideshow) Next slide");
-        presentation.goToNextSlide();
-    }
-
     Timer {
-        id: advanceTimer
-        interval: 1000
+        interval: 5000
         running: presentation.activatedInCalamares
         repeat: true
-        onTriggered: nextSlide()
+        onTriggered: presentation.goToNextSlide()
     }
 
-    Slide {
+    function onActivate() { }
+    function onLeave() { }
 
-        Image {
-            id: background
-            source: "squid.png"
-            width: 200; height: 200
-            fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-        }
-        Text {
-            anchors.horizontalCenter: background.horizontalCenter
-            anchors.top: background.bottom
-            text: "This is a customizable QML slideshow.<br/>"+
-                  "Distributions should provide their own slideshow and list it in <br/>"+
-                  "their custom branding.desc file.<br/>"+
-                  "To create a Calamares presentation in QML, import calamares.slideshow,<br/>"+
-                  "define a Presentation element with as many Slide elements as needed."
-            wrapMode: Text.WordWrap
-            width: presentation.width
-            horizontalAlignment: Text.Center
-        }
+    Rectangle {
+        id: mybackground
+        anchors.fill: parent
+        color: Branding.styleString(Branding.SidebarBackground)
+        z: -1
     }
 
-    Slide {
-        centeredText: qsTr("This is a second Slide element.")
+    ImageSlide {
+        src: "slide-1.png"
     }
 
-    Slide {
-        centeredText: qsTr("This is a third Slide element.")
+    ImageSlide {
+        src: "slide-2.png"
     }
 
-    // When this slideshow is loaded as a V1 slideshow, only
-    // activatedInCalamares is set, which starts the timer (see above).
-    //
-    // In V2, also the onActivate() and onLeave() methods are called.
-    // These example functions log a message (and re-start the slides
-    // from the first).
-    function onActivate() {
-        console.log("QML Component (default slideshow) activated");
-        presentation.currentSlide = 0;
-    }
-
-    function onLeave() {
-        console.log("QML Component (default slideshow) deactivated");
+    ImageSlide {
+        src: "slide-3.png"
     }
 
 }
